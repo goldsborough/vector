@@ -4,7 +4,7 @@
 
 <br>
 
-`vector` is a feature-complete, generic and customizable resizable array implementation in plain C that supports almost the entire C++ `std::vector` API, including iterators.
+`vector` is a feature-complete, generic and customizable resizable array implementation in pure C that supports almost the entire C++ `std::vector` API, including iterators.
 
 ## Usage
 
