@@ -4,7 +4,7 @@
 #include "vector.h"
 
 int main(int argc, const char* argv[]) {
-	Vector vector;
+	Vector vector = VECTOR_INITIALIZER;
 	assert(!vector_is_initialized(&vector));
 	vector_setup(&vector, 0, sizeof(int));
 	assert(vector_is_initialized(&vector));
