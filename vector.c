@@ -16,9 +16,9 @@ int vector_setup(Vector* vector, size_t capacity, size_t element_size) {
 	vector->size = 0;
 	vector->capacity = MAX(VECTOR_MINIMUM_CAPACITY, capacity);
 	vector->element_size = element_size;
-	vector->data = malloc(capacity * element_size);
+	vector->data = malloc(vector->capacity * element_size);
 
-	return vector->data ? VECTOR_SUCCESS : VECTOR_ERROR;
+	return vector->data == NULL ? VECTOR_ERROR : VECTOR_SUCCESS;
 }
 
 int vector_destroy(Vector* vector) {
@@ -74,12 +74,12 @@ int vector_insert(Vector* vector, size_t index, void* element) {
 	}
 
 	/* Move other elements to the right */
-	offset = _vector_offset(vector, index);
-	if (_vector_move_right(vector, index, offset) == VECTOR_ERROR) {
+	if (_vector_move_right(vector, index) == VECTOR_ERROR) {
 		return VECTOR_ERROR;
 	}
 
 	/* Insert the element */
+	offset = _vector_offset(vector, index);
 	memcpy(offset, element, vector->element_size);
 	++vector->size;
 
@@ -188,8 +188,14 @@ bool vector_is_empty(const Vector* vector) {
 
 /* Memory management */
 int vector_resize(Vector* vector, size_t new_size) {
-	if (new_size > vector->capacity ||
-			new_size <= vector->size * VECTOR_SHRINK_THRESHOLD) {
+	if (new_size <= vector->capacity * VECTOR_SHRINK_THRESHOLD) {
+		// Optimize by setting the size here so we'll only
+		// copy the elements we need if we reallocate
+		vector->size = new_size;
+		if (_vector_reallocate(vector, new_size * VECTOR_GROWTH_FACTOR) == -1) {
+			return VECTOR_ERROR;
+		}
+	} else if (new_size > vector->capacity) {
 		if (_vector_reallocate(vector, new_size * VECTOR_GROWTH_FACTOR) == -1) {
 			return VECTOR_ERROR;
 		}
@@ -308,21 +314,30 @@ void _vector_assign(Vector* vector, size_t index, void* element) {
 	memcpy(offset, element, vector->element_size);
 }
 
-int _vector_move_right(Vector* vector, size_t index, void* offset) {
-	/* How many to move to the right */
+int _vector_move_right(Vector* vector, size_t index) {
+	assert(vector->size < vector->capacity);
+
+	/* The location where to start to move from. */
+	void* offset = _vector_offset(vector, index);
+
+	/* How many to move to the right. */
 	size_t elements_in_bytes = (vector->size - index) * vector->element_size;
 
 #ifdef __STDC_LIB_EXT1__
 	size_t right_capacity_in_bytes =
 			(vector->capacity - (index + 1)) * vector->element_size;
+
 	/* clang-format off */
-	return memmove_s(
+	int return_code =  memmove_s(
 		offset + vector->element_size,
 		right_capacity_in_bytes,
 		offset,
 		elements_in_bytes
 	);
-/* clang-format on */
+	/* clang-format on */
+
+	return return_code == 0 ? VECTOR_SUCCESS : VECTOR_ERROR;
+
 #else
 	memmove(offset + vector->element_size, offset, elements_in_bytes);
 	return VECTOR_SUCCESS;
@@ -368,12 +383,14 @@ int _vector_reallocate(Vector* vector, size_t new_capacity) {
 	}
 
 #ifdef __STDC_LIB_EXT1__
+	/* clang-format off */
 	if (memcpy_s(vector->data,
 							 new_capacity_in_bytes,
 							 old,
-							 vector_byte_size(vector, vector->element_size)) != 0) {
+							 vector_byte_size(vector)) != 0) {
 		return VECTOR_ERROR;
 	}
+/* clang-format on */
 #else
 	memcpy(vector->data, old, vector_byte_size(vector));
 #endif

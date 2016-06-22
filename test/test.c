@@ -4,6 +4,8 @@
 #include "vector.h"
 
 int main(int argc, const char* argv[]) {
+	int i;
+
 	Vector vector = VECTOR_INITIALIZER;
 	assert(!vector_is_initialized(&vector));
 	vector_setup(&vector, 0, sizeof(int));
@@ -11,7 +13,7 @@ int main(int argc, const char* argv[]) {
 
 	printf("TESTING INSERT ...\n");
 
-	for (int i = 0; i < 1000; ++i) {
+	for (i = 0; i < 1000; ++i) {
 		assert(vector_insert(&vector, 0, &i) == VECTOR_SUCCESS);
 		assert(VECTOR_GET_AS(int, &vector, 0) == i);
 		assert(vector.size == i + 1);
@@ -23,7 +25,7 @@ int main(int argc, const char* argv[]) {
 
 	printf("TESTING ASSIGNMENT ...\n");
 
-	for (int i = 0; i < vector.size; ++i) {
+	for (i = 0; i < vector.size; ++i) {
 		int value = 666;
 		assert(vector_assign(&vector, i, &value) == VECTOR_SUCCESS);
 	}
@@ -52,6 +54,7 @@ int main(int argc, const char* argv[]) {
 	assert(vector.size == 100);
 	assert(vector.capacity == 200);
 
+	printf("TESTING CLEAR ...\n");
 	assert(vector_clear(&vector) == VECTOR_SUCCESS);
 
 	assert(vector.size == 0);

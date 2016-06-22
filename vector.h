@@ -104,7 +104,7 @@ void* _vector_offset(Vector* vector, size_t index);
 
 void _vector_assign(Vector* vector, size_t index, void* element);
 
-int _vector_move_right(Vector* vector, size_t index, void* offset);
+int _vector_move_right(Vector* vector, size_t index);
 void _vector_move_left(Vector* vector, size_t index);
 
 int _vector_adjust_capacity(Vector* vector);

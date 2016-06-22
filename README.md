@@ -13,12 +13,13 @@
 
 int main(int argc, const char* argv[]) {
 	Vector vector;
+	int x, y, sum;
 
-	// Choose initial capacity of 10
-	// Specify the size of the elements you want to store once
+	/* Choose initial capacity of 10 */
+	/* Specify the size of the elements you want to store once */
 	vector_setup(&vector, 10, sizeof(int));
 
-	int x = 6, y = 9;
+	x = 6, y = 9;
 	vector_push_back(&vector, &x);
 	vector_insert(&vector, 0, &y);
 	vector_assign(&vector, 0, &y);
@@ -29,19 +30,20 @@ int main(int argc, const char* argv[]) {
 
 	vector_remove(&vector, 1);
 
-	// Iterator support
+	/* Iterator support */
 	Iterator iterator = vector_begin(&vector);
-	Iterator end = vector_end(&vector);
-	for (; !iterator_equals(&iterator, &end); iterator_increment(&iterator)) {
-		printf("%d\n", *(int*)iterator_get(&iterator));
+	Iterator last = vector_end(&vector);
+	for (; !iterator_equals(&iterator, &last); iterator_increment(&iterator)) {
+		*(int*)iterator_get(&iterator) += 1;
 	}
 
-	// Or just use pretty macros
+	/* Or just use pretty macros */
+	sum = 0;
 	VECTOR_FOR_EACH(&vector, i) {
-		printf("%d\n", ITERATOR_GET_AS(int, &i));
+		sum += ITERATOR_GET_AS(int, &i);
 	}
 
-	// Memory management interface
+	/* Memory management interface */
 	vector_resize(&vector, 10);
 	vector_reserve(&vector, 100);
 

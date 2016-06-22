@@ -17,11 +17,14 @@ add_library(vector SHARED vector.c)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_executable(vector-test vector.c ${CMAKE_CURRENT_SOURCE_DIR}/test/test.c)
-add_executable(example vector.c ${CMAKE_CURRENT_SOURCE_DIR}/test/example.c)
+add_executable(vector-test ${CMAKE_CURRENT_SOURCE_DIR}/test/test.c)
+add_executable(vector-example ${CMAKE_CURRENT_SOURCE_DIR}/test/example.c)
+
+target_link_libraries(vector-test vector)
+target_link_libraries(vector-example vector)
 
 ###########################################################
 ## COMPILER FLAGS
 ###########################################################
 
-target_compile_options(vector PUBLIC -O3 -Os -std=c90 -g)
+target_compile_options(vector PUBLIC -O3 -Os -ansi -g)
