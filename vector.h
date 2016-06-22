@@ -34,41 +34,41 @@ typedef struct Iterator {
 
 /***** METHODS *****/
 
-// Constructor / Destructor
+/* Constructor / Destructor */
 int vector_setup(Vector* vector, size_t capacity, size_t element_size);
 int vector_destroy(Vector* vector);
 
-// Insertion
+/* Insertion */
 int vector_push_back(Vector* vector, void* element);
 int vector_push_front(Vector* vector, void* element);
 int vector_insert(Vector* vector, size_t index, void* element);
 int vector_assign(Vector* vector, size_t index, void* element);
 
-// Deletion
+/* Deletion */
 int vector_pop_back(Vector* vector);
 int vector_pop_front(Vector* vector);
 int vector_remove(Vector* vector, size_t index);
 int vector_clear(Vector* vector);
 
-// Lookup
+/* Lookup */
 void* vector_get(Vector* vector, size_t index);
 void* vector_front(Vector* vector);
 void* vector_back(Vector* vector);
 #define VECTOR_GET_AS(type, vector_pointer, index) \
 	*((type*)vector_get((vector_pointer), (index)))
 
-// Information
+/* Information */
 bool vector_is_initialized(const Vector* vector);
 size_t vector_byte_size(const Vector* vector);
 size_t vector_free_space(const Vector* vector);
 bool vector_is_empty(const Vector* vector);
 
-// Memory management
+/* Memory management */
 int vector_resize(Vector* vector, size_t new_size);
 int vector_reserve(Vector* vector, size_t minimum_capacity);
 int vector_shrink_to_fit(Vector* vector);
 
-// Iterators
+/* Iterators */
 Iterator vector_begin(Vector* vector);
 Iterator vector_end(Vector* vector);
 Iterator vector_iterator(Vector* vector, size_t index);

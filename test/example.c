@@ -4,8 +4,8 @@
 int main(int argc, const char* argv[]) {
 	Vector vector;
 
-	// Choose initial capacity of 10
-	// Specify the size of the elements you want to store once
+	/* Choose initial capacity of 10 */
+	/* Specify the size of the elements you want to store once */
 	vector_setup(&vector, 10, sizeof(int));
 
 	int x = 6, y = 9;
@@ -19,19 +19,19 @@ int main(int argc, const char* argv[]) {
 
 	vector_remove(&vector, 1);
 
-	// Iterator support
+	/* Iterator support */
 	Iterator iterator = vector_begin(&vector);
 	Iterator end = vector_end(&vector);
 	for (; !iterator_equals(&iterator, &end); iterator_increment(&iterator)) {
 		printf("%d\n", *(int*)iterator_get(&iterator));
 	}
 
-	// Or just use pretty macros
+	/* Or just use pretty macros */
 	VECTOR_FOR_EACH(&vector, i) {
 		printf("%d\n", ITERATOR_GET_AS(int, &i));
 	}
 
-	// Memory management interface
+	/* Memory management interface */
 	vector_resize(&vector, 10);
 	vector_reserve(&vector, 100);
 

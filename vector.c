@@ -33,7 +33,7 @@ int vector_destroy(Vector* vector) {
 	return VECTOR_SUCCESS;
 }
 
-// Insertion
+/* Insertion */
 int vector_push_back(Vector* vector, void* element) {
 	assert(vector != NULL);
 	assert(element != NULL);
@@ -73,13 +73,13 @@ int vector_insert(Vector* vector, size_t index, void* element) {
 		}
 	}
 
-	// Move other elements to the right
+	/* Move other elements to the right */
 	offset = _vector_offset(vector, index);
 	if (_vector_move_right(vector, index, offset) == VECTOR_ERROR) {
 		return VECTOR_ERROR;
 	}
 
-	// Insert the element
+	/* Insert the element */
 	memcpy(offset, element, vector->element_size);
 	++vector->size;
 
@@ -101,7 +101,7 @@ int vector_assign(Vector* vector, size_t index, void* element) {
 	return VECTOR_SUCCESS;
 }
 
-// Deletion
+/* Deletion */
 int vector_pop_back(Vector* vector) {
 	assert(vector != NULL);
 	assert(vector->size > 0);
@@ -132,7 +132,7 @@ int vector_remove(Vector* vector, size_t index) {
 	if (vector->element_size == 0) return VECTOR_ERROR;
 	if (index >= vector->size) return VECTOR_ERROR;
 
-	// Just overwrite
+	/* Just overwrite */
 	_vector_move_left(vector, index);
 
 #ifndef VECTOR_NO_SHRINK
@@ -148,7 +148,7 @@ int vector_clear(Vector* vector) {
 	return vector_resize(vector, 0);
 }
 
-// Lookup
+/* Lookup */
 void* vector_get(Vector* vector, size_t index) {
 	assert(vector != NULL);
 	assert(index < vector->size);
@@ -168,7 +168,7 @@ void* vector_back(Vector* vector) {
 	return vector_get(vector, vector->size - 1);
 }
 
-// Information
+/* Information */
 
 bool vector_is_initialized(const Vector* vector) {
 	return vector->data != NULL;
@@ -186,7 +186,7 @@ bool vector_is_empty(const Vector* vector) {
 	return vector->size == 0;
 }
 
-// Memory management
+/* Memory management */
 int vector_resize(Vector* vector, size_t new_size) {
 	if (new_size > vector->capacity ||
 			new_size <= vector->size * VECTOR_SHRINK_THRESHOLD) {
@@ -214,7 +214,7 @@ int vector_shrink_to_fit(Vector* vector) {
 	return _vector_reallocate(vector, vector->size);
 }
 
-// Iterators
+/* Iterators */
 Iterator vector_begin(Vector* vector) {
 	return vector_iterator(vector, 0);
 }
@@ -303,26 +303,26 @@ void* _vector_offset(Vector* vector, size_t index) {
 }
 
 void _vector_assign(Vector* vector, size_t index, void* element) {
-	// Insert the element
+	/* Insert the element */
 	void* offset = _vector_offset(vector, index);
 	memcpy(offset, element, vector->element_size);
 }
 
 int _vector_move_right(Vector* vector, size_t index, void* offset) {
-	// How many to move to the right
+	/* How many to move to the right */
 	size_t elements_in_bytes = (vector->size - index) * vector->element_size;
 
 #ifdef __STDC_LIB_EXT1__
 	size_t right_capacity_in_bytes =
 			(vector->capacity - (index + 1)) * vector->element_size;
-	// clang-format off
+	/* clang-format off */
 	return memmove_s(
 		offset + vector->element_size,
 		right_capacity_in_bytes,
 		offset,
 		elements_in_bytes
 	);
-// clang-format on
+/* clang-format on */
 #else
 	memmove(offset + vector->element_size, offset, elements_in_bytes);
 	return VECTOR_SUCCESS;
@@ -333,10 +333,10 @@ void _vector_move_left(Vector* vector, size_t index) {
 	size_t right_elements_in_bytes;
 	void* offset;
 
-	// The offset into the memory
+	/* The offset into the memory */
 	offset = _vector_offset(vector, index);
 
-	// How many to move to the left
+	/* How many to move to the left */
 	right_elements_in_bytes = (vector->size - index - 1) * vector->element_size;
 
 	memmove(offset, offset + vector->element_size, right_elements_in_bytes);
@@ -355,7 +355,7 @@ int _vector_reallocate(Vector* vector, size_t new_capacity) {
 		if (vector->capacity > VECTOR_MINIMUM_CAPACITY) {
 			new_capacity = VECTOR_MINIMUM_CAPACITY;
 		} else {
-			// NO-OP
+			/* NO-OP */
 			return VECTOR_SUCCESS;
 		}
 	}

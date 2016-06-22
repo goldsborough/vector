@@ -24,4 +24,4 @@ add_executable(example vector.c ${CMAKE_CURRENT_SOURCE_DIR}/test/example.c)
 ## COMPILER FLAGS
 ###########################################################
 
-target_compile_options(vector PUBLIC -O3 -Os -std=c90)
+target_compile_options(vector PUBLIC -O3 -Os -std=c90 -g)
