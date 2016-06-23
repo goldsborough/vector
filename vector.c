@@ -189,8 +189,6 @@ bool vector_is_empty(const Vector* vector) {
 /* Memory management */
 int vector_resize(Vector* vector, size_t new_size) {
 	if (new_size <= vector->capacity * VECTOR_SHRINK_THRESHOLD) {
-		// Optimize by setting the size here so we'll only
-		// copy the elements we need if we reallocate
 		vector->size = new_size;
 		if (_vector_reallocate(vector, new_size * VECTOR_GROWTH_FACTOR) == -1) {
 			return VECTOR_ERROR;
