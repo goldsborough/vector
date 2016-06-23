@@ -34,8 +34,24 @@ typedef struct Iterator {
 
 /***** METHODS *****/
 
-/* Constructor / Destructor */
+/* Constructor */
 int vector_setup(Vector* vector, size_t capacity, size_t element_size);
+
+/* Copy Constructor */
+int vector_copy(Vector* destination, Vector* source);
+
+/* Copy Assignment */
+int vector_copy_assign(Vector* destination, Vector* source);
+
+/* Move Constructor */
+int vector_move(Vector* destination, Vector* source);
+
+/* Move Assignment */
+int vector_move_assign(Vector* destination, Vector* source);
+
+int vector_swap(Vector* destination, Vector* source);
+
+/* Destructor */
 int vector_destroy(Vector* vector);
 
 /* Insertion */
@@ -109,5 +125,7 @@ void _vector_move_left(Vector* vector, size_t index);
 
 int _vector_adjust_capacity(Vector* vector);
 int _vector_reallocate(Vector* vector, size_t new_capacity);
+
+void _vector_swap(size_t* first, size_t* second);
 
 #endif /* VECTOR_H */

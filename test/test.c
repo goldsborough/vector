@@ -6,6 +6,7 @@
 int main(int argc, const char* argv[]) {
 	int i;
 
+	printf("TESTING SETUP ...\n");
 	Vector vector = VECTOR_INITIALIZER;
 	assert(!vector_is_initialized(&vector));
 	vector_setup(&vector, 0, sizeof(int));

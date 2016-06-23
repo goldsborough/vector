@@ -21,6 +21,89 @@ int vector_setup(Vector* vector, size_t capacity, size_t element_size) {
 	return vector->data == NULL ? VECTOR_ERROR : VECTOR_SUCCESS;
 }
 
+int vector_copy(Vector* destination, Vector* source) {
+	assert(destination != NULL);
+	assert(source != NULL);
+	assert(vector_is_initialized(source));
+	assert(!vector_is_initialized(destination));
+
+	if (destination == NULL) return VECTOR_ERROR;
+	if (source == NULL) return VECTOR_ERROR;
+	if (vector_is_initialized(destination)) return VECTOR_ERROR;
+	if (!vector_is_initialized(source)) return VECTOR_ERROR;
+
+	/* Copy ALL the data */
+	destination->size = source->size;
+	destination->capacity = source->size * 2;
+	destination->element_size = source->element_size;
+
+	/* Note that we are not necessarily allocating the same capacity */
+	destination->data = malloc(destination->capacity * source->element_size);
+	if (destination->data == NULL) return VECTOR_ERROR;
+
+	memcpy(destination->data, source->data, vector_byte_size(source));
+
+	return VECTOR_SUCCESS;
+}
+
+int vector_copy_assign(Vector* destination, Vector* source) {
+	assert(destination != NULL);
+	assert(source != NULL);
+	assert(vector_is_initialized(source));
+	assert(vector_is_initialized(destination));
+
+	if (destination == NULL) return VECTOR_ERROR;
+	if (source == NULL) return VECTOR_ERROR;
+	if (!vector_is_initialized(destination)) return VECTOR_ERROR;
+	if (!vector_is_initialized(source)) return VECTOR_ERROR;
+
+	vector_destroy(destination);
+
+	return vector_copy(destination, source);
+}
+
+int vector_move(Vector* destination, Vector* source) {
+	assert(destination != NULL);
+	assert(source != NULL);
+
+	if (destination == NULL) return VECTOR_ERROR;
+	if (source == NULL) return VECTOR_ERROR;
+
+	*destination = *source;
+	source->data = NULL;
+
+	return VECTOR_SUCCESS;
+}
+
+int vector_move_assign(Vector* destination, Vector* source) {
+	vector_swap(destination, source);
+	return vector_destroy(source);
+}
+
+int vector_swap(Vector* destination, Vector* source) {
+	void* temp;
+
+	assert(destination != NULL);
+	assert(source != NULL);
+	assert(vector_is_initialized(source));
+	assert(vector_is_initialized(destination));
+
+	if (destination == NULL) return VECTOR_ERROR;
+	if (source == NULL) return VECTOR_ERROR;
+	if (!vector_is_initialized(destination)) return VECTOR_ERROR;
+	if (!vector_is_initialized(source)) return VECTOR_ERROR;
+
+	_vector_swap(&destination->size, &source->size);
+	_vector_swap(&destination->capacity, &source->capacity);
+	_vector_swap(&destination->element_size, &source->element_size);
+
+	temp = destination->data;
+	destination->data = source->data;
+	source->data = temp;
+
+	return VECTOR_SUCCESS;
+}
+
 int vector_destroy(Vector* vector) {
 	assert(vector != NULL);
 	assert(vector_is_initialized(vector));
@@ -29,6 +112,7 @@ int vector_destroy(Vector* vector) {
 	if (!vector_is_initialized(vector)) return VECTOR_ERROR;
 
 	free(vector->data);
+	vector->data = NULL;
 
 	return VECTOR_SUCCESS;
 }
@@ -398,4 +482,10 @@ int _vector_reallocate(Vector* vector, size_t new_capacity) {
 	free(old);
 
 	return VECTOR_SUCCESS;
+}
+
+void _vector_swap(size_t* first, size_t* second) {
+	size_t temp = *first;
+	*first = *second;
+	*second = temp;
 }
