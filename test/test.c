@@ -41,7 +41,7 @@ int main(int argc, const char* argv[]) {
 
 	size_t expected_size = vector.size;
 	while (!vector_is_empty(&vector)) {
-		assert(vector_remove(&vector, 0) == VECTOR_SUCCESS);
+		assert(vector_erase(&vector, 0) == VECTOR_SUCCESS);
 		assert(vector.size == --expected_size);
 	}
 

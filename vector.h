@@ -6,7 +6,7 @@
 
 /***** DEFINITIONS *****/
 
-#define VECTOR_MINIMUM_CAPACITY 8
+#define VECTOR_MINIMUM_CAPACITY 1
 #define VECTOR_GROWTH_FACTOR 2
 #define VECTOR_SHRINK_THRESHOLD (1 / 4)
 
@@ -63,7 +63,7 @@ int vector_assign(Vector* vector, size_t index, void* element);
 /* Deletion */
 int vector_pop_back(Vector* vector);
 int vector_pop_front(Vector* vector);
-int vector_remove(Vector* vector, size_t index);
+int vector_erase(Vector* vector, size_t index);
 int vector_clear(Vector* vector);
 
 /* Lookup */

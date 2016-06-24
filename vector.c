@@ -8,10 +8,8 @@
 
 int vector_setup(Vector* vector, size_t capacity, size_t element_size) {
 	assert(vector != NULL);
-	assert(!vector_is_initialized(vector));
 
 	if (vector == NULL) return VECTOR_ERROR;
-	if (vector_is_initialized(vector)) return VECTOR_ERROR;
 
 	vector->size = 0;
 	vector->capacity = MAX(VECTOR_MINIMUM_CAPACITY, capacity);
@@ -106,10 +104,8 @@ int vector_swap(Vector* destination, Vector* source) {
 
 int vector_destroy(Vector* vector) {
 	assert(vector != NULL);
-	assert(vector_is_initialized(vector));
 
 	if (vector == NULL) return VECTOR_ERROR;
-	if (!vector_is_initialized(vector)) return VECTOR_ERROR;
 
 	free(vector->data);
 	vector->data = NULL;
@@ -205,10 +201,10 @@ int vector_pop_back(Vector* vector) {
 }
 
 int vector_pop_front(Vector* vector) {
-	return vector_remove(vector, 0);
+	return vector_erase(vector, 0);
 }
 
-int vector_remove(Vector* vector, size_t index) {
+int vector_erase(Vector* vector, size_t index) {
 	assert(vector != NULL);
 	assert(index < vector->size);
 
@@ -455,7 +451,8 @@ void _vector_move_left(Vector* vector, size_t index) {
 }
 
 int _vector_adjust_capacity(Vector* vector) {
-	return _vector_reallocate(vector, vector->size * VECTOR_GROWTH_FACTOR);
+	return _vector_reallocate(vector,
+														MAX(1, vector->size * VECTOR_GROWTH_FACTOR));
 }
 
 int _vector_reallocate(Vector* vector, size_t new_capacity) {

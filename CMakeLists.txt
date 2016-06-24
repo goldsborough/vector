@@ -10,6 +10,7 @@ project(vector)
 ###########################################################
 
 add_library(vector SHARED vector.c)
+add_library(vector-static STATIC vector.c)
 
 ###########################################################
 ## EXECUTABLES

@@ -17,7 +17,7 @@ int main(int argc, const char* argv[]) {
 	y = *(int*)vector_back(&vector);
 	x = VECTOR_GET_AS(int, &vector, 1);
 
-	vector_remove(&vector, 1);
+	vector_erase(&vector, 1);
 
 	/* Iterator support */
 	Iterator iterator = vector_begin(&vector);
