@@ -68,6 +68,7 @@ int vector_clear(Vector* vector);
 
 /* Lookup */
 void* vector_get(Vector* vector, size_t index);
+const void* vector_const_get(const Vector* vector, size_t index);
 void* vector_front(Vector* vector);
 void* vector_back(Vector* vector);
 #define VECTOR_GET_AS(type, vector_pointer, index) \
@@ -117,6 +118,7 @@ bool _vector_should_shrink(Vector* vector);
 
 size_t _vector_free_bytes(const Vector* vector);
 void* _vector_offset(Vector* vector, size_t index);
+const void* _vector_const_offset(const Vector* vector, size_t index);
 
 void _vector_assign(Vector* vector, size_t index, void* element);
 

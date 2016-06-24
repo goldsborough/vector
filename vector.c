@@ -244,6 +244,17 @@ void* vector_get(Vector* vector, size_t index) {
 	return _vector_offset(vector, index);
 }
 
+const void* vector_const_get(const Vector* vector, size_t index) {
+	assert(vector != NULL);
+	assert(index < vector->size);
+
+	if (vector == NULL) return NULL;
+	if (vector->element_size == 0) return NULL;
+	if (index >= vector->size) return NULL;
+
+	return _vector_const_offset(vector, index);
+}
+
 void* vector_front(Vector* vector) {
 	return vector_get(vector, 0);
 }
@@ -387,6 +398,10 @@ size_t _vector_free_bytes(const Vector* vector) {
 }
 
 void* _vector_offset(Vector* vector, size_t index) {
+	return vector->data + (index * vector->element_size);
+}
+
+const void* _vector_const_offset(const Vector* vector, size_t index) {
 	return vector->data + (index * vector->element_size);
 }
 
