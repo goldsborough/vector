@@ -338,6 +338,18 @@ void* iterator_get(Iterator* iterator) {
 	return iterator->pointer;
 }
 
+int iterator_erase(Vector* vector, Iterator* iterator) {
+	size_t index = iterator_index(vector, iterator);
+
+	if (vector_erase(vector, index) == VECTOR_ERROR) {
+		return VECTOR_ERROR;
+	}
+
+	*iterator = vector_iterator(vector, index);
+
+	return VECTOR_SUCCESS;
+}
+
 void iterator_increment(Iterator* iterator) {
 	assert(iterator != NULL);
 	iterator->pointer += iterator->element_size;
@@ -375,6 +387,12 @@ bool iterator_is_before(Iterator* first, Iterator* second) {
 bool iterator_is_after(Iterator* first, Iterator* second) {
 	assert(first->element_size == second->element_size);
 	return first->pointer > second->pointer;
+}
+
+size_t iterator_index(Vector* vector, Iterator* iterator) {
+	assert(vector != NULL);
+	assert(iterator != NULL);
+	return (iterator->pointer - vector->data) / vector->element_size;
 }
 
 /***** PRIVATE *****/

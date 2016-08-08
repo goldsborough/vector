@@ -33,11 +33,20 @@ int main(int argc, const char* argv[]) {
 
 	printf("TESTING ITERATION ...\n");
 
+	Iterator iterator = vector_begin(&vector);
+	assert(iterator_index(&vector, &iterator) == 0);
+
+	iterator = vector_iterator(&vector, 1);
+	assert(iterator_index(&vector, &iterator) == 1);
+
 	VECTOR_FOR_EACH(&vector, iterator) {
 		assert(ITERATOR_GET_AS(int, &iterator) == 666);
 	}
 
 	printf("TESTING REMOVAL ...\n");
+
+	iterator = vector_begin(&vector);
+	assert(iterator_erase(&vector, &iterator) == VECTOR_SUCCESS);
 
 	size_t expected_size = vector.size;
 	while (!vector_is_empty(&vector)) {

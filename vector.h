@@ -93,6 +93,8 @@ Iterator vector_iterator(Vector* vector, size_t index);
 void* iterator_get(Iterator* iterator);
 #define ITERATOR_GET_AS(type, iterator) *((type*)iterator_get((iterator)))
 
+int iterator_erase(Vector* vector, Iterator* iterator);
+
 void iterator_increment(Iterator* iterator);
 void iterator_decrement(Iterator* iterator);
 
@@ -102,6 +104,8 @@ void* iterator_previous(Iterator* iterator);
 bool iterator_equals(Iterator* first, Iterator* second);
 bool iterator_is_before(Iterator* first, Iterator* second);
 bool iterator_is_after(Iterator* first, Iterator* second);
+
+size_t iterator_index(Vector* vector, Iterator* iterator);
 
 #define VECTOR_FOR_EACH(vector_pointer, iterator_name)           \
 	for (Iterator(iterator_name) = vector_begin((vector_pointer)), \
