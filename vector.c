@@ -280,7 +280,6 @@ void* vector_back(Vector* vector) {
 }
 
 /* Information */
-
 bool vector_is_initialized(const Vector* vector) {
 	return vector->data != NULL;
 }
@@ -372,12 +371,20 @@ int iterator_erase(Vector* vector, Iterator* iterator) {
 
 void iterator_increment(Iterator* iterator) {
 	assert(iterator != NULL);
-	iterator->pointer += iterator->element_size;
+	#ifndef _MSC_VER
+		iterator->pointer += iterator->element_size;
+	#else
+		(char *)iterator->pointer += iterator->element_size;
+	#endif
 }
 
 void iterator_decrement(Iterator* iterator) {
 	assert(iterator != NULL);
-	iterator->pointer -= iterator->element_size;
+	#ifndef _MSC_VER
+		iterator->pointer -= iterator->element_size;
+	#else
+		(char *)iterator->pointer -= iterator->element_size;
+	#endif
 }
 
 void* iterator_next(Iterator* iterator) {
@@ -412,7 +419,11 @@ bool iterator_is_after(Iterator* first, Iterator* second) {
 size_t iterator_index(Vector* vector, Iterator* iterator) {
 	assert(vector != NULL);
 	assert(iterator != NULL);
-	return (iterator->pointer - vector->data) / vector->element_size;
+	#ifndef _MSC_VER
+		return (iterator->pointer - vector->data) / vector->element_size;
+	#else
+		return ((char *)iterator->pointer - vector->data) / vector->element_size;
+	#endif
 }
 
 /***** PRIVATE *****/
@@ -432,11 +443,19 @@ size_t _vector_free_bytes(const Vector* vector) {
 }
 
 void* _vector_offset(Vector* vector, size_t index) {
-	return vector->data + (index * vector->element_size);
+	#ifndef _MSC_VER
+		return vector->data + (index * vector->element_size);
+	#else
+		return (char *)vector->data + (index * vector->element_size);
+	#endif
 }
 
 const void* _vector_const_offset(const Vector* vector, size_t index) {
-	return vector->data + (index * vector->element_size);
+	#ifndef _MSC_VER
+		return vector->data + (index * vector->element_size);
+	#else
+		return (char *)vector->data + (index * vector->element_size);
+	#endif
 }
 
 void _vector_assign(Vector* vector, size_t index, void* element) {
@@ -470,7 +489,11 @@ int _vector_move_right(Vector* vector, size_t index) {
 	return return_code == 0 ? VECTOR_SUCCESS : VECTOR_ERROR;
 
 #else
-	memmove(offset + vector->element_size, offset, elements_in_bytes);
+	#ifndef _MSC_VER
+		memmove(offset + vector->element_size, offset, elements_in_bytes);
+	#else
+		memmove((char *)offset + vector->element_size, offset, elements_in_bytes);
+	#endif
 	return VECTOR_SUCCESS;
 #endif
 }
@@ -485,7 +508,11 @@ void _vector_move_left(Vector* vector, size_t index) {
 	/* How many to move to the left */
 	right_elements_in_bytes = (vector->size - index - 1) * vector->element_size;
 
-	memmove(offset, offset + vector->element_size, right_elements_in_bytes);
+	#ifndef _MSC_VER
+		memmove(offset, offset + vector->element_size, right_elements_in_bytes);
+	#else
+		memmove(offset, (char *)offset + vector->element_size, right_elements_in_bytes);
+	#endif
 }
 
 int _vector_adjust_capacity(Vector* vector) {
