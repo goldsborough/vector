@@ -6,6 +6,17 @@
 int main(int argc, const char* argv[]) {
 	int i;
 
+	printf("TESTING TYPED SETUP ...\n");
+	Vector svector = VECTOR_TYPE_INITIALIZER(int);
+	assert(!vector_is_initialized(&svector));
+
+	int j = 0;
+	vector_push_back(&svector, &j);
+	assert(vector_is_initialized(&svector));
+	assert(VECTOR_GET_AS(int, &svector, 0) == j);
+
+	vector_destroy(&svector);
+
 	printf("TESTING SETUP ...\n");
 	Vector vector = VECTOR_INITIALIZER;
 	assert(!vector_is_initialized(&vector));
