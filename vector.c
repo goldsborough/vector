@@ -32,11 +32,11 @@ int vector_setup(Vector* vector, size_t capacity, size_t element_size) {
 	if (vector == NULL) return VECTOR_ERROR;
 
 	vector->size = 0;
-	vector->capacity = MAX(VECTOR_MINIMUM_CAPACITY, capacity);
+	vector->capacity = capacity;
 	vector->element_size = element_size;
-	vector->data = malloc(vector->capacity * element_size);
+	vector->data = VECTOR_UNINITIALIZED;
 
-	return vector->data == NULL ? VECTOR_ERROR : VECTOR_SUCCESS;
+	return _vector_adjust_capacity(vector);
 }
 
 int vector_copy(Vector* destination, Vector* source) {
@@ -419,7 +419,7 @@ size_t iterator_index(Vector* vector, Iterator* iterator) {
 
 bool _vector_should_grow(Vector* vector) {
 	assert(vector->size <= vector->capacity);
-	return vector->size == vector->capacity;
+	return vector->data == VECTOR_UNINITIALIZED || vector->size == vector->capacity;
 }
 
 bool _vector_should_shrink(Vector* vector) {
@@ -489,8 +489,13 @@ void _vector_move_left(Vector* vector, size_t index) {
 }
 
 int _vector_adjust_capacity(Vector* vector) {
-	return _vector_reallocate(vector,
-														MAX(1, vector->size * VECTOR_GROWTH_FACTOR));
+	if (vector->data == VECTOR_UNINITIALIZED) {
+		vector->capacity = MAX(VECTOR_MINIMUM_CAPACITY, vector->capacity);
+		vector->data = malloc(vector->capacity * vector->element_size);
+		return vector->data == NULL ? VECTOR_ERROR : VECTOR_SUCCESS;
+	} else {
+		return _vector_reallocate(vector, MAX(1, vector->size * VECTOR_GROWTH_FACTOR));
+	}
 }
 
 int _vector_reallocate(Vector* vector, size_t new_capacity) {
