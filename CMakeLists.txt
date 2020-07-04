@@ -31,4 +31,11 @@ target_link_libraries(vector-example vector)
 ## COMPILER FLAGS
 ###########################################################
 
-target_compile_options(vector PUBLIC -O3 -Os -std=c99 -g)
+# Enable all possible warnings and treat them as errors
+set(WRN_FLAGS -Wall -Wextra -Wpedantic -Werror)
+target_compile_options(vector PRIVATE ${WRN_FLAGS})
+target_compile_options(vector-static PRIVATE ${WRN_FLAGS})
+target_compile_options(vector-test PRIVATE ${WRN_FLAGS})
+target_compile_options(vector-example PRIVATE ${WRN_FLAGS})
+
+target_compile_options(vector PUBLIC -O3 -Os -g)
