@@ -100,6 +100,7 @@ void* vector_back(Vector* vector);
 
 /* Information */
 bool vector_is_initialized(const Vector* vector);
+size_t vector_size(const Vector* vector);
 size_t vector_byte_size(const Vector* vector);
 size_t vector_free_space(const Vector* vector);
 bool vector_is_empty(const Vector* vector);

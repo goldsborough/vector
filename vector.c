@@ -289,6 +289,10 @@ bool vector_is_initialized(const Vector* vector) {
 	return vector->data != NULL;
 }
 
+size_t vector_size(const Vector* vector) {
+	return vector->size;
+}
+
 size_t vector_byte_size(const Vector* vector) {
 	return vector->size * vector->element_size;
 }
