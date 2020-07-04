@@ -2,8 +2,11 @@
 ## CMAKE SETUP
 ###########################################################
 
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.5)
 project(vector)
+
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED ON)
 
 ###########################################################
 ## LIBRARY
@@ -28,4 +31,22 @@ target_link_libraries(vector-example vector)
 ## COMPILER FLAGS
 ###########################################################
 
-target_compile_options(vector PUBLIC -O3 -Os -std=c99 -g)
+# Enable all possible warnings and treat them as errors
+set(WRN_FLAGS -Wall -Wextra -Wpedantic -Werror)
+target_compile_options(vector PRIVATE ${WRN_FLAGS})
+target_compile_options(vector-static PRIVATE ${WRN_FLAGS})
+target_compile_options(vector-test PRIVATE ${WRN_FLAGS})
+target_compile_options(vector-example PRIVATE ${WRN_FLAGS})
+
+# Enable address sanitizer for debug builds
+set(SNTZR_FLAGS -fno-omit-frame-pointer -fsanitize=address -fsanitize=leak -fsanitize=undefined)
+target_compile_options(vector PRIVATE "$<$<CONFIG:DEBUG>:${SNTZR_FLAGS}>")
+target_link_options(vector PRIVATE "$<$<CONFIG:DEBUG>:${SNTZR_FLAGS}>")
+target_compile_options(vector-static PRIVATE "$<$<CONFIG:DEBUG>:${SNTZR_FLAGS}>")
+target_link_options(vector-static PRIVATE "$<$<CONFIG:DEBUG>:${SNTZR_FLAGS}>")
+target_compile_options(vector-test PRIVATE "$<$<CONFIG:DEBUG>:${SNTZR_FLAGS}>")
+target_link_options(vector-test PRIVATE "$<$<CONFIG:DEBUG>:${SNTZR_FLAGS}>")
+target_compile_options(vector-example PRIVATE "$<$<CONFIG:DEBUG>:${SNTZR_FLAGS}>")
+target_link_options(vector-example PRIVATE "$<$<CONFIG:DEBUG>:${SNTZR_FLAGS}>")
+
+target_compile_options(vector PUBLIC -O3 -Os -g)

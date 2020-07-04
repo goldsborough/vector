@@ -24,6 +24,10 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /***** DEFINITIONS *****/
 
 #define VECTOR_MINIMUM_CAPACITY 2
@@ -96,6 +100,7 @@ void* vector_back(Vector* vector);
 
 /* Information */
 bool vector_is_initialized(const Vector* vector);
+size_t vector_size(const Vector* vector);
 size_t vector_byte_size(const Vector* vector);
 size_t vector_free_space(const Vector* vector);
 bool vector_is_empty(const Vector* vector);
@@ -153,5 +158,9 @@ int _vector_adjust_capacity(Vector* vector);
 int _vector_reallocate(Vector* vector, size_t new_capacity);
 
 void _vector_swap(size_t* first, size_t* second);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif /* VECTOR_H */
