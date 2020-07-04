@@ -38,4 +38,15 @@ target_compile_options(vector-static PRIVATE ${WRN_FLAGS})
 target_compile_options(vector-test PRIVATE ${WRN_FLAGS})
 target_compile_options(vector-example PRIVATE ${WRN_FLAGS})
 
+# Enable address sanitizer for debug builds
+set(SNTZR_FLAGS -fno-omit-frame-pointer -fsanitize=address -fsanitize=leak -fsanitize=undefined)
+target_compile_options(vector PRIVATE "$<$<CONFIG:DEBUG>:${SNTZR_FLAGS}>")
+target_link_options(vector PRIVATE "$<$<CONFIG:DEBUG>:${SNTZR_FLAGS}>")
+target_compile_options(vector-static PRIVATE "$<$<CONFIG:DEBUG>:${SNTZR_FLAGS}>")
+target_link_options(vector-static PRIVATE "$<$<CONFIG:DEBUG>:${SNTZR_FLAGS}>")
+target_compile_options(vector-test PRIVATE "$<$<CONFIG:DEBUG>:${SNTZR_FLAGS}>")
+target_link_options(vector-test PRIVATE "$<$<CONFIG:DEBUG>:${SNTZR_FLAGS}>")
+target_compile_options(vector-example PRIVATE "$<$<CONFIG:DEBUG>:${SNTZR_FLAGS}>")
+target_link_options(vector-example PRIVATE "$<$<CONFIG:DEBUG>:${SNTZR_FLAGS}>")
+
 target_compile_options(vector PUBLIC -O3 -Os -g)
