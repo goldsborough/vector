@@ -26,6 +26,10 @@
 
 #include "vector.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 int vector_setup(Vector* vector, size_t capacity, size_t element_size) {
 	assert(vector != NULL);
 
@@ -539,3 +543,7 @@ void _vector_swap(size_t* first, size_t* second) {
 	*first = *second;
 	*second = temp;
 }
+
+#ifdef __cplusplus
+}
+#endif
