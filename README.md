@@ -1,10 +1,10 @@
-# vector
+# vector.
 
 [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](http://goldsborough.mit-license.org)
 
 `vector` is a feature-complete, generic and customizable resizable array implementation in pure C that supports almost the entire C++ `std::vector` API, including iterators.
 
-## Usage
+## Usage.
 
 ```C
 #include "vector.h"
@@ -50,11 +50,11 @@ int main(int argc, const char* argv[]) {
 }
 ```
 
-## LICENSE
+## LICENSE.
 
 This project is released under the [MIT License](http://goldsborough.mit-license.org). For more information, see the `LICENSE` file.
 
-## Authors
+## Authors.
 
 [Peter Goldsborough](http://www.goldsborough.me) + [cat](https://goo.gl/IpUmJn) :heart:
 
