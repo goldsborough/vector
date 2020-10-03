@@ -26,6 +26,27 @@
 
 #include "vector.h"
 
+#ifndef MAX
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#endif
+
+bool _vector_should_grow(Vector* vector);
+bool _vector_should_shrink(Vector* vector);
+
+size_t _vector_free_bytes(const Vector* vector);
+void* _vector_offset(Vector* vector, size_t index);
+const void* _vector_const_offset(const Vector* vector, size_t index);
+
+void _vector_assign(Vector* vector, size_t index, void* element);
+
+int _vector_move_right(Vector* vector, size_t index);
+void _vector_move_left(Vector* vector, size_t index);
+
+int _vector_adjust_capacity(Vector* vector);
+int _vector_reallocate(Vector* vector, size_t new_capacity);
+
+void _vector_swap(size_t* first, size_t* second);
+
 int vector_setup(Vector* vector, size_t capacity, size_t element_size) {
 	assert(vector != NULL);
 
