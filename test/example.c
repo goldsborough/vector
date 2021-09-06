@@ -1,6 +1,8 @@
 #include "vector.h"
 
 int main(int argc, const char* argv[]) {
+	(void)argc;
+	(void)argv;
 	Vector vector;
 	int x, y, sum;
 

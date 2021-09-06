@@ -1,10 +1,13 @@
 #include <assert.h>
 #include <stdio.h>
+#include <stdint.h>
 
 #include "vector.h"
 
 int main(int argc, const char* argv[]) {
-	int i;
+	(void)argc;
+	(void)argv;
+	uint64_t i;
 
 	printf("TESTING SETUP ...\n");
 	Vector vector = VECTOR_INITIALIZER;
